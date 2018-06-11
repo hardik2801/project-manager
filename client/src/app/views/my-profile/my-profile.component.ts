@@ -5,6 +5,7 @@ import { ApiService } from '../../services/api.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { NewprojectComponent } from '../modals/newproject/newproject.component';
 import { AddEditTaskComponent } from '../modals/add-edit-task/add-edit-task.component';
+import { AddeditCommentsComponent } from '../modals/addedit-comments/addedit-comments.component';
 
 @Component({
   selector: 'app-my-profile',
@@ -14,12 +15,17 @@ import { AddEditTaskComponent } from '../modals/add-edit-task/add-edit-task.comp
 export class MyProfileComponent implements OnInit {
   userId; resp; loading; projectModalData; showingTasks; taskModalData;
   name; email; projects; showingProjects; tasks; projectName; projectId;
+  loggedIn;
 
   @ViewChild(NewprojectComponent) newProjectModal: NewprojectComponent;
   @ViewChild(AddEditTaskComponent) addEditTask: AddEditTaskComponent;
+  @ViewChild(AddeditCommentsComponent) addEditComment: AddeditCommentsComponent;
 
   constructor(public routerStateParamsService: RouterStateParamsService, private apiService: ApiService, public _router: Router, public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
+    this._router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
   }
 
   getUserData() {
@@ -50,6 +56,13 @@ export class MyProfileComponent implements OnInit {
     this.taskModalData = task;
     setTimeout(() => {
       this.addEditTask.open();
+    }, 0);
+  }
+
+  viewComments(task) {
+    this.taskModalData = task;
+    setTimeout(() => {
+      this.addEditComment.open();
     }, 0);
   }
 
@@ -102,7 +115,6 @@ export class MyProfileComponent implements OnInit {
   closeTaskModal(new_project) {
     if (new_project) {
       if (new_project.operation == 'edited') {
-      console.log(new_project.tasks, 'new tasks');
         this.tasks = new_project.tasks;
       }
     }
@@ -136,6 +148,8 @@ export class MyProfileComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.routerStateParamsService.getParams().source.value.id;
+    this.loggedIn = localStorage.getItem('userId');
+
     this.loading = {
       projects: true,
       tasks: false
@@ -146,6 +160,11 @@ export class MyProfileComponent implements OnInit {
     this.tasks = [];
     this.projectId = null;
     this.name = null;
+
+    if (this.userId !== this.loggedIn) {
+      this._router.navigate(['my-profile/' + this.loggedIn]);
+      return;
+    }
     this.getUserData();
   }
 

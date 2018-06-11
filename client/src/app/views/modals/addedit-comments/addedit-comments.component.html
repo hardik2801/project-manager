@@ -1,0 +1,56 @@
+<bs-modal #modal>
+  <bs-modal-header>
+    <h3 class="modal-title">View/ Modify Comments</h3>
+    <small>{{taskName}}</small>
+    <button class="btn btn-primary pull-right" (click)="addComment()">Add</button>
+  </bs-modal-header>
+  <bs-modal-body>
+
+    <table class="table table-bordered table-striped" *ngIf="task.comments.length > 0">
+      <thead>
+        <tr>
+          <th>Comment</th>
+          <th>Added on</th>
+          <th>Edited On</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comment of task.comments" class="clickable">
+          <td>{{comment.message}}</td>
+          <td>{{comment.createdon | date: 'medium'}}</td>
+          <td>{{(comment.modifiedon | date: 'medium') || 'NA'}}</td>
+          <td>
+            <button type="button" class="btn btn-default btn-sm" (click)="editComment(comment)">
+              <span class="glyphicon glyphicon-edit"></span> Edit
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="deleteComment(comment)"> Delete </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 *ngIf="task.comments.length == 0">No Comments have been Added.
+      <a (click)="addComment()">Add One?</a>
+    </h4>
+
+    <div class="row" *ngIf="newComment || oldComment">
+      <div class="col-xs-12">
+        <input type="text" placeholder="Enter Comment" style="margin-bottom: 10px;" [ngModel]="commentMessage" (ngModelChange)="commentMessage = $event">
+        <span class="text-danger" [hidden]="!noComment">No Comment Entered</span>
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-primary" (click)="onSubmit()">Save</button>
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-default" (click)="cancel()">Cancel</button>
+      </div>
+    </div>
+
+  </bs-modal-body>
+  <bs-modal-footer [showDefaultButtons]="false">
+    <div class="box-footer">
+      <button class="btn btn-default" (click)="close(null)">Close</button>
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Save</button>
+    </div>
+  </bs-modal-footer>
+</bs-modal>

@@ -13,6 +13,7 @@
       <a class="btn btn-primary open-modal-btn" *ngIf="showingTasks && tasks.length > 0 " (click)="taskModal(null)">Add Task</a>
   <app-newproject [incomingData]="projectModalData" [userId]="userId" (modalClosed)="closeModal($event)"></app-newproject>
   <app-add-edit-task [incomingData]="taskModalData" [projectId]="projectId" (modalClosed)="closeTaskModal($event)"></app-add-edit-task>
+  <app-addedit-comments [incomingData]="taskModalData" [projectId]="projectId"></app-addedit-comments>
 </section>
 
 <section class="content" [hidden]="loading.tasks" *ngIf="showingProjects">
@@ -67,7 +68,7 @@
             <td>{{(task.deadline | date: 'medium') || 'NA'}}</td>
             <td>{{task.priority || 'NA' }}</td>
             <td>{{task.status || 'NA'}}</td>
-            <td><a (click)="viewComments(task.comments)">View/Add/Edit Comments</a></td>
+            <td><a (click)="viewComments(task)">View/Add/Edit Comments</a></td>
             <td>
               <button type="button" class="btn btn-default btn-sm" (click)="taskModal(task)">
                 <span class="glyphicon glyphicon-edit"></span> Edit

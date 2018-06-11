@@ -177,12 +177,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_ng2_bs3_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_ng2_bs3_modal__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__views_modals_add_edit_task_add_edit_task_component__ = __webpack_require__("../../../../../client/src/app/views/modals/add-edit-task/add-edit-task.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angular2_datetimepicker__ = __webpack_require__("../../../../angular2-datetimepicker/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__views_modals_addedit_comments_addedit_comments_component__ = __webpack_require__("../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -211,6 +213,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_11__views_my_profile_my_profile_component__["a" /* MyProfileComponent */],
                 __WEBPACK_IMPORTED_MODULE_13__views_modals_newproject_newproject_component__["a" /* NewprojectComponent */],
                 __WEBPACK_IMPORTED_MODULE_15__views_modals_add_edit_task_add_edit_task_component__["a" /* AddEditTaskComponent */],
+                __WEBPACK_IMPORTED_MODULE_17__views_modals_addedit_comments_addedit_comments_component__["a" /* AddeditCommentsComponent */],
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -262,13 +265,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// import { Observable } from 'rxjs/Observable';
-// import 'rxjs/Rx';
 var ApiService = /** @class */ (function () {
     function ApiService(http, httpClient) {
         this.http = http;
         this.httpClient = httpClient;
-        // this.srcApiUrl = environment.baseUrl + environment.apiUrl + 'source/';
     }
     ApiService.prototype.login = function (email, password) {
         var login_data = {
@@ -361,6 +361,27 @@ var ApiService = /** @class */ (function () {
             return response;
         });
     };
+    ApiService.prototype.editComment = function (taskName, projectId, oldMsg, newMsg) {
+        return this.httpClient
+            .post('http://127.0.0.1:3000/api/project/editcomment', { taskName: taskName, projectId: projectId, oldMsg: oldMsg, newMsg: newMsg }, this.addToken())
+            .map(function (response) {
+            return response;
+        });
+    };
+    ApiService.prototype.addComment = function (projectId, comment, taskName) {
+        return this.httpClient
+            .post('http://127.0.0.1:3000/api/project/addcomment', { projectId: projectId, commentMsg: comment, taskName: taskName }, this.addToken())
+            .map(function (response) {
+            return response;
+        });
+    };
+    ApiService.prototype.deleteComment = function (projectId, comment, taskName) {
+        return this.httpClient
+            .post('http://127.0.0.1:3000/api/project/deleteComment', { projectId: projectId, commentMsg: comment, taskName: taskName }, this.addToken())
+            .map(function (response) {
+            return response;
+        });
+    };
     ApiService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
@@ -393,7 +414,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/views/login-signup/login-signup.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"currentRoute=='login'\">\n  <div [hidden]=\"!loading\" class=\"loading loading-big\"></div>\n  <div class=\"row set-mid\" [hidden]=\"loading\">\n    <div class=\"title\">\n      <h4>Hello!</h4>\n      <span>Please Log In to Your Account.</span>\n    </div>\n    <input type=\"text\" id=\"email\" class=\"form-control form-custom\" [(ngModel)]=\"email_ip\" placeholder=\"Email Address\" required=\"required\"\n    />\n    <input type=\"password\" id=\"password\" class=\"form-control form-custom\" [(ngModel)]=\"password_ip\" placeholder=\"Password\" required=\"required\"\n    />\n    <div class=\"row\">\n      <button class=\"btn btn-custom\" (click)=\"login()\">Login</button>\n      <!-- <div class=\"forgot-text\">\n        <a href=\"#\">Forgot Password? </a>\n      </div> -->\n    </div>\n    <span class=\"bottom-text\">\n      Still without account?\n      <a (click)=\"navigate('signup')\">Signup</a>\n    </span>\n  </div>\n</div>\n<div class=\"container\" *ngIf=\"currentRoute == 'signup'\">\n  <div [hidden]=\"!loading\" class=\"loading loading-big\"></div>\n  <div class=\"row set-mid\" [hidden]=\"loading\">\n    <div class=\"title\">\n      <h4>Signup</h4>\n      <span>Create an account to use Paynearby without limits. For free.</span>\n    </div>\n    <input type=\"text\" id=\"new_name\" class=\"form-control form-custom\" [(ngModel)]=\"name_ip\" placeholder=\"Name\" required=\"required\"\n    />\n    <input type=\"email\" id=\"new_email\" class=\"form-control form-custom\" [(ngModel)]=\"email_ip\" placeholder=\"Email Address\" required=\"required\"\n    />\n    <input type=\"password\" id=\"new_password\" class=\"form-control form-custom\" [(ngModel)]=\"password_ip\" placeholder=\"Password\"\n      required=\"required\" />\n    <div class=\"row\">\n      <button class=\"btn btn-custom\" (click)=\"signup()\">Signup</button>\n    </div>\n    <span class=\"bottom-text\">\n      Already have an account?\n      <a (click)=\"navigate('login')\">Login</a>\n    </span>\n  </div>\n</div>"
+module.exports = "<div class=\"container\" *ngIf=\"currentRoute=='login'\">\n  <div [hidden]=\"!loading\" class=\"loading loading-big\"></div>\n  <div class=\"row set-mid\" [hidden]=\"loading\">\n    <div class=\"title\">\n      <h4>Hello!</h4>\n      <span>Please Log In to Your Account.</span>\n    </div>\n    <input type=\"text\" id=\"email\" class=\"form-control form-custom\" [(ngModel)]=\"email_ip\" placeholder=\"Email Address\" required=\"required\"\n    />\n    <input type=\"password\" id=\"password\" class=\"form-control form-custom\" [(ngModel)]=\"password_ip\" placeholder=\"Password\" required=\"required\"\n    />\n    <div class=\"row\">\n      <button class=\"btn btn-custom\" (click)=\"login()\">Login</button>\n    </div>\n    <span class=\"bottom-text\">\n      Still without account?\n      <a (click)=\"navigate('signup')\">Signup</a>\n    </span>\n  </div>\n</div>\n<div class=\"container\" *ngIf=\"currentRoute == 'signup'\">\n  <div [hidden]=\"!loading\" class=\"loading loading-big\"></div>\n  <div class=\"row set-mid\" [hidden]=\"loading\">\n    <div class=\"title\">\n      <h4>Signup</h4>\n      <span>Create an account to use Paynearby without limits. For free.</span>\n    </div>\n    <input type=\"text\" id=\"new_name\" class=\"form-control form-custom\" [(ngModel)]=\"name_ip\" placeholder=\"Name\" required=\"required\"\n    />\n    <input type=\"email\" id=\"new_email\" class=\"form-control form-custom\" [(ngModel)]=\"email_ip\" placeholder=\"Email Address\" required=\"required\"\n    />\n    <input type=\"password\" id=\"new_password\" class=\"form-control form-custom\" [(ngModel)]=\"password_ip\" placeholder=\"Password\"\n      required=\"required\" />\n    <div class=\"row\">\n      <button class=\"btn btn-custom\" (click)=\"signup()\">Signup</button>\n    </div>\n    <span class=\"bottom-text\">\n      Already have an account?\n      <a (click)=\"navigate('login')\">Login</a>\n    </span>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -430,7 +451,6 @@ var LoginSignupComponent = /** @class */ (function () {
     LoginSignupComponent.prototype.navigate = function (route) {
         if (route === 'signup') {
             this.currentRoute = 'signup';
-            // this._router.navigate(['/login?signup=' + true]);
         }
         else {
             this.currentRoute = 'login';
@@ -685,6 +705,212 @@ var AddEditTaskComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<bs-modal #modal>\n  <bs-modal-header>\n    <h3 class=\"modal-title\">View/ Modify Comments</h3>\n    <small>{{taskName}}</small>\n    <button class=\"btn btn-primary pull-right\" (click)=\"addComment()\">Add</button>\n  </bs-modal-header>\n  <bs-modal-body>\n\n    <table class=\"table table-bordered table-striped\" *ngIf=\"task.comments.length > 0\">\n      <thead>\n        <tr>\n          <th>Comment</th>\n          <th>Added on</th>\n          <th>Edited On</th>\n          <th>Actions</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr *ngFor=\"let comment of task.comments\" class=\"clickable\">\n          <td>{{comment.message}}</td>\n          <td>{{comment.createdon | date: 'medium'}}</td>\n          <td>{{(comment.modifiedon | date: 'medium') || 'NA'}}</td>\n          <td>\n            <button type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"editComment(comment)\">\n              <span class=\"glyphicon glyphicon-edit\"></span> Edit\n            </button>\n            <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"deleteComment(comment)\"> Delete </button>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n    <h4 *ngIf=\"task.comments.length == 0\">No Comments have been Added.\n      <a (click)=\"addComment()\">Add One?</a>\n    </h4>\n\n    <div class=\"row\" *ngIf=\"newComment || oldComment\">\n      <div class=\"col-xs-12\">\n        <input type=\"text\" placeholder=\"Enter Comment\" style=\"margin-bottom: 10px;\" [ngModel]=\"commentMessage\" (ngModelChange)=\"commentMessage = $event\">\n        <span class=\"text-danger\" [hidden]=\"!noComment\">No Comment Entered</span>\n      </div>\n      <div class=\"col-xs-6\">\n        <button class=\"btn btn-primary\" (click)=\"onSubmit()\">Save</button>\n      </div>\n      <div class=\"col-xs-6\">\n        <button class=\"btn btn-default\" (click)=\"cancel()\">Cancel</button>\n      </div>\n    </div>\n\n  </bs-modal-body>\n  <bs-modal-footer [showDefaultButtons]=\"false\">\n    <div class=\"box-footer\">\n      <button class=\"btn btn-default\" (click)=\"close(null)\">Close</button>\n      <button type=\"submit\" class=\"btn btn-primary\" (click)=\"onSubmit()\">Save</button>\n    </div>\n  </bs-modal-footer>\n</bs-modal>"
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddeditCommentsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bs3_modal__ = __webpack_require__("../../../../ng2-bs3-modal/bundles/ng2-bs3-modal.umd.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bs3_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_bs3_modal__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_api_service__ = __webpack_require__("../../../../../client/src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AddeditCommentsComponent = /** @class */ (function () {
+    function AddeditCommentsComponent(apiService, toastr, vcr) {
+        this.apiService = apiService;
+        this.toastr = toastr;
+        this.modalClosed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.toastr.setRootViewContainerRef(vcr);
+    }
+    AddeditCommentsComponent.prototype.open = function () {
+        if (this.incomingData) {
+            this.task = this.incomingData;
+            this.taskName = this.incomingData.name;
+        }
+        this.modal.open();
+    };
+    AddeditCommentsComponent.prototype.close = function (data, operation) {
+        if (data) {
+            data.operation = operation;
+            this.modalClosed.emit(data);
+        }
+        else {
+            this.modalClosed.emit(null);
+        }
+        this.noComment = false;
+        this.modal.close();
+    };
+    AddeditCommentsComponent.prototype.isEmptyOrSpaces = function (str) {
+        if (str == undefined || str == null)
+            return true;
+        if (str.trim('').length == 0)
+            return true;
+        return false;
+    };
+    AddeditCommentsComponent.prototype.addComment = function () {
+        this.newComment = true;
+    };
+    AddeditCommentsComponent.prototype.editComment = function (comment) {
+        this.oldMsg = comment.message;
+        this.commentMessage = comment.message;
+        this.oldComment = true;
+    };
+    AddeditCommentsComponent.prototype.deleteComment = function (comment) {
+        var _this = this;
+        this.apiService.deleteComment(this.projectId, this.commentMessage, this.taskName).subscribe(function (response) {
+            _this.resp = response;
+        }, function (error) {
+            console.log('Error :: ' + error);
+        }, function () {
+            if (!_this.resp.status) {
+                _this.toastr.error('Some Error Occured, Please Try Again');
+            }
+            else if (_this.resp.status) {
+                _this.resp.data.tasks.forEach(function (task) {
+                    if (task.name == _this.taskName) {
+                        _this.task = task;
+                    }
+                });
+                _this.toastr.success('Comment Deleted');
+            }
+        });
+    };
+    AddeditCommentsComponent.prototype.cancel = function () {
+        this.newComment = false;
+        this.commentMessage = null;
+        this.oldComment = false;
+    };
+    AddeditCommentsComponent.prototype.onSubmit = function () {
+        var _this = this;
+        if (this.isEmptyOrSpaces(this.commentMessage)) {
+            this.noComment = true;
+            return;
+        }
+        if (this.oldComment) {
+            this.apiService.editComment(this.taskName, this.projectId, this.oldMsg, this.commentMessage).subscribe(function (response) {
+                _this.resp = response;
+            }, function (error) {
+                console.log('Error :: ' + error);
+            }, function () {
+                if (!_this.resp.status) {
+                    _this.toastr.error('Some Error Occured, Please Try Again');
+                }
+                else if (_this.resp.status) {
+                    _this.resp.data.tasks.forEach(function (task) {
+                        if (task.name == _this.taskName) {
+                            _this.task = task;
+                        }
+                    });
+                    _this.newComment = false;
+                    _this.commentMessage = null;
+                    _this.oldComment = false;
+                    _this.toastr.success('Comment Updated');
+                }
+            });
+        }
+        else {
+            this.apiService.addComment(this.projectId, this.commentMessage, this.taskName).subscribe(function (response) {
+                _this.resp = response;
+            }, function (error) {
+                console.log('Error :: ' + error);
+            }, function () {
+                if (!_this.resp.status) {
+                    _this.toastr.error('Some Error Occured, Please Try Again');
+                }
+                else if (_this.resp.status) {
+                    _this.resp.data.tasks.forEach(function (task) {
+                        if (task.name == _this.taskName) {
+                            _this.task = task;
+                        }
+                    });
+                    _this.toastr.success('New Comment Added');
+                }
+            });
+        }
+    };
+    AddeditCommentsComponent.prototype.ngOnInit = function () {
+        this.task = {
+            name: null,
+            deadline: null,
+            priority: null,
+            status: null,
+            comments: []
+        };
+        this.newComment = false;
+        this.oldComment = false;
+        this.commentMessage = null;
+        this.noComment = false;
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_1_ng2_bs3_modal__["BsModalComponent"]),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ng2_bs3_modal__["BsModalComponent"])
+    ], AddeditCommentsComponent.prototype, "modal", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], AddeditCommentsComponent.prototype, "incomingData", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], AddeditCommentsComponent.prototype, "projectId", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])('modalClosed'),
+        __metadata("design:type", Object)
+    ], AddeditCommentsComponent.prototype, "modalClosed", void 0);
+    AddeditCommentsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-addedit-comments',
+            template: __webpack_require__("../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.html"),
+            styles: [__webpack_require__("../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_api_service__["a" /* ApiService */], __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"], __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]])
+    ], AddeditCommentsComponent);
+    return AddeditCommentsComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../client/src/app/views/modals/newproject/newproject.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -768,8 +994,6 @@ var NewprojectComponent = /** @class */ (function () {
     };
     NewprojectComponent.prototype.onSubmit = function () {
         var _this = this;
-        // this.data.name = this.data.name.trim();
-        // if (this.data.name) {
         if (!this.isEmptyOrSpaces(this.projectName)) {
             this.noName = false;
             if (this.incomingData) {
@@ -809,9 +1033,6 @@ var NewprojectComponent = /** @class */ (function () {
         }
     };
     NewprojectComponent.prototype.ngOnInit = function () {
-        // if (!this.projectName) {
-        //   this.projectName = null;
-        // }
         this.noName = false;
     };
     __decorate([
@@ -866,7 +1087,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/views/my-profile/my-profile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"content-header container\" [hidden]=\"loading.projects\">\n  <h3 *ngIf=\"showingProjects\">\n    Welcome {{name}}!\n  </h3>\n\n  <h3 *ngIf=\"showingTasks\">\n    {{projectName}}!\n  </h3>\n  <h5 *ngIf=\"showingProjects\">Click on any Project to get Started or </h5>\n  <a *ngIf=\"showingProjects\" class=\"btn btn-primary open-modal-btn\" (click)=\"projectModal(null)\">Add New Project</a>\n  <button *ngIf=\"showingTasks\" type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"goBack()\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back </button>\n      <a class=\"btn btn-primary open-modal-btn\" *ngIf=\"showingTasks && tasks.length > 0 \" (click)=\"taskModal(null)\">Add Task</a>\n  <app-newproject [incomingData]=\"projectModalData\" [userId]=\"userId\" (modalClosed)=\"closeModal($event)\"></app-newproject>\n  <app-add-edit-task [incomingData]=\"taskModalData\" [projectId]=\"projectId\" (modalClosed)=\"closeTaskModal($event)\"></app-add-edit-task>\n</section>\n\n<section class=\"content\" [hidden]=\"loading.tasks\" *ngIf=\"showingProjects\">\n  <div class=\"row\">\n    <div class=\"col-xs-6 projects\">\n      <table class=\"table table-bordered table-striped\" *ngIf=\"projects.length > 0\">\n        <thead>\n          <tr>\n            <th>Name</th>\n            <th>Started On</th>\n            <th>Actions</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let project of projects\" class=\"clickable\">\n            <td (click)=\"showTasks(project)\">{{project.name}}</td>\n            <td (click)=\"showTasks(project)\">{{project.createdon | date: 'medium'}}</td>\n            <td>\n              <button type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"projectModal(project)\">\n                <span class=\"glyphicon glyphicon-edit\"></span> Edit\n              </button>\n              <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"deleteProject(project)\"> Delete </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n      <h4 *ngIf=\"projects.length == 0\">No Projects have been Added.\n        <a (click)=\"projectModal(null)\">Click Here</a> to Add a Project </h4>\n    </div>\n  </div>\n</section>\n\n<section class=\"content\" [hidden]=\"loading.projects\" *ngIf=\"showingTasks\">\n  <div class=\"row\">\n    <div class=\"col-xs-8 projects\">\n      <table class=\"table table-bordered table-striped\" *ngIf=\"tasks.length > 0\">\n        <thead>\n          <tr>\n            <th>Name</th>\n            <th>Added On</th>\n            <th>Deadline</th>\n            <th>Priority</th>\n            <th>Status</th>\n            <th>Comments</th>\n            <th>Actions</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let task of tasks\">\n            <td>{{task.name}}</td>\n            <td>{{task.createdon | date: 'medium'}}</td>\n            <td>{{(task.deadline | date: 'medium') || 'NA'}}</td>\n            <td>{{task.priority || 'NA' }}</td>\n            <td>{{task.status || 'NA'}}</td>\n            <td><a (click)=\"viewComments(task.comments)\">View/Add/Edit Comments</a></td>\n            <td>\n              <button type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"taskModal(task)\">\n                <span class=\"glyphicon glyphicon-edit\"></span> Edit\n              </button>\n              <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"deleteTask(task)\"> Delete </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n      <h4 *ngIf=\"tasks.length == 0\">No tasks have been Added. <a class=\"btn btn-primary open-modal-btn\" (click)=\"taskModal(null)\">Add Task</a></h4>\n    </div>\n  </div>\n</section>\n\n\n<div class=\"loading loading-big\" [hidden]=\"!loading.projects || !loading.tasks\"></div>"
+module.exports = "<section class=\"content-header container\" [hidden]=\"loading.projects\">\n  <h3 *ngIf=\"showingProjects\">\n    Welcome {{name}}!\n  </h3>\n\n  <h3 *ngIf=\"showingTasks\">\n    {{projectName}}!\n  </h3>\n  <h5 *ngIf=\"showingProjects\">Click on any Project to get Started or </h5>\n  <a *ngIf=\"showingProjects\" class=\"btn btn-primary open-modal-btn\" (click)=\"projectModal(null)\">Add New Project</a>\n  <button *ngIf=\"showingTasks\" type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"goBack()\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back </button>\n      <a class=\"btn btn-primary open-modal-btn\" *ngIf=\"showingTasks && tasks.length > 0 \" (click)=\"taskModal(null)\">Add Task</a>\n  <app-newproject [incomingData]=\"projectModalData\" [userId]=\"userId\" (modalClosed)=\"closeModal($event)\"></app-newproject>\n  <app-add-edit-task [incomingData]=\"taskModalData\" [projectId]=\"projectId\" (modalClosed)=\"closeTaskModal($event)\"></app-add-edit-task>\n  <app-addedit-comments [incomingData]=\"taskModalData\" [projectId]=\"projectId\"></app-addedit-comments>\n</section>\n\n<section class=\"content\" [hidden]=\"loading.tasks\" *ngIf=\"showingProjects\">\n  <div class=\"row\">\n    <div class=\"col-xs-6 projects\">\n      <table class=\"table table-bordered table-striped\" *ngIf=\"projects.length > 0\">\n        <thead>\n          <tr>\n            <th>Name</th>\n            <th>Started On</th>\n            <th>Actions</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let project of projects\" class=\"clickable\">\n            <td (click)=\"showTasks(project)\">{{project.name}}</td>\n            <td (click)=\"showTasks(project)\">{{project.createdon | date: 'medium'}}</td>\n            <td>\n              <button type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"projectModal(project)\">\n                <span class=\"glyphicon glyphicon-edit\"></span> Edit\n              </button>\n              <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"deleteProject(project)\"> Delete </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n      <h4 *ngIf=\"projects.length == 0\">No Projects have been Added.\n        <a (click)=\"projectModal(null)\">Click Here</a> to Add a Project </h4>\n    </div>\n  </div>\n</section>\n\n<section class=\"content\" [hidden]=\"loading.projects\" *ngIf=\"showingTasks\">\n  <div class=\"row\">\n    <div class=\"col-xs-8 projects\">\n      <table class=\"table table-bordered table-striped\" *ngIf=\"tasks.length > 0\">\n        <thead>\n          <tr>\n            <th>Name</th>\n            <th>Added On</th>\n            <th>Deadline</th>\n            <th>Priority</th>\n            <th>Status</th>\n            <th>Comments</th>\n            <th>Actions</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let task of tasks\">\n            <td>{{task.name}}</td>\n            <td>{{task.createdon | date: 'medium'}}</td>\n            <td>{{(task.deadline | date: 'medium') || 'NA'}}</td>\n            <td>{{task.priority || 'NA' }}</td>\n            <td>{{task.status || 'NA'}}</td>\n            <td><a (click)=\"viewComments(task)\">View/Add/Edit Comments</a></td>\n            <td>\n              <button type=\"button\" class=\"btn btn-default btn-sm\" (click)=\"taskModal(task)\">\n                <span class=\"glyphicon glyphicon-edit\"></span> Edit\n              </button>\n              <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"deleteTask(task)\"> Delete </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n      <h4 *ngIf=\"tasks.length == 0\">No tasks have been Added. <a class=\"btn btn-primary open-modal-btn\" (click)=\"taskModal(null)\">Add Task</a></h4>\n    </div>\n  </div>\n</section>\n\n\n<div class=\"loading loading-big\" [hidden]=\"!loading.projects || !loading.tasks\"></div>"
 
 /***/ }),
 
@@ -883,6 +1104,7 @@ module.exports = "<section class=\"content-header container\" [hidden]=\"loading
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modals_newproject_newproject_component__ = __webpack_require__("../../../../../client/src/app/views/modals/newproject/newproject.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modals_add_edit_task_add_edit_task_component__ = __webpack_require__("../../../../../client/src/app/views/modals/add-edit-task/add-edit-task.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modals_addedit_comments_addedit_comments_component__ = __webpack_require__("../../../../../client/src/app/views/modals/addedit-comments/addedit-comments.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -899,6 +1121,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var MyProfileComponent = /** @class */ (function () {
     function MyProfileComponent(routerStateParamsService, apiService, _router, toastr, vcr) {
         this.routerStateParamsService = routerStateParamsService;
@@ -906,6 +1129,9 @@ var MyProfileComponent = /** @class */ (function () {
         this._router = _router;
         this.toastr = toastr;
         this.toastr.setRootViewContainerRef(vcr);
+        this._router.routeReuseStrategy.shouldReuseRoute = function () {
+            return false;
+        };
     }
     MyProfileComponent.prototype.getUserData = function () {
         var _this = this;
@@ -936,6 +1162,13 @@ var MyProfileComponent = /** @class */ (function () {
         this.taskModalData = task;
         setTimeout(function () {
             _this.addEditTask.open();
+        }, 0);
+    };
+    MyProfileComponent.prototype.viewComments = function (task) {
+        var _this = this;
+        this.taskModalData = task;
+        setTimeout(function () {
+            _this.addEditComment.open();
         }, 0);
     };
     MyProfileComponent.prototype.deleteProject = function (project) {
@@ -987,7 +1220,7 @@ var MyProfileComponent = /** @class */ (function () {
     MyProfileComponent.prototype.closeTaskModal = function (new_project) {
         if (new_project) {
             if (new_project.operation == 'edited') {
-                console.log(new_project.tasks, 'new tasks');
+                console.log(new_project, 'new tasks');
                 this.tasks = new_project.tasks;
             }
         }
@@ -1018,6 +1251,7 @@ var MyProfileComponent = /** @class */ (function () {
     };
     MyProfileComponent.prototype.ngOnInit = function () {
         this.userId = this.routerStateParamsService.getParams().source.value.id;
+        this.loggedIn = localStorage.getItem('userId');
         this.loading = {
             projects: true,
             tasks: false
@@ -1028,6 +1262,10 @@ var MyProfileComponent = /** @class */ (function () {
         this.tasks = [];
         this.projectId = null;
         this.name = null;
+        if (this.userId !== this.loggedIn) {
+            this._router.navigate(['my-profile/' + this.loggedIn]);
+            return;
+        }
         this.getUserData();
     };
     __decorate([
@@ -1038,6 +1276,10 @@ var MyProfileComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_6__modals_add_edit_task_add_edit_task_component__["a" /* AddEditTaskComponent */]),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_6__modals_add_edit_task_add_edit_task_component__["a" /* AddEditTaskComponent */])
     ], MyProfileComponent.prototype, "addEditTask", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_7__modals_addedit_comments_addedit_comments_component__["a" /* AddeditCommentsComponent */]),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__modals_addedit_comments_addedit_comments_component__["a" /* AddeditCommentsComponent */])
+    ], MyProfileComponent.prototype, "addEditComment", void 0);
     MyProfileComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-my-profile',

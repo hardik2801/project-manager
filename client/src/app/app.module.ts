@@ -15,6 +15,7 @@ import { NewprojectComponent } from './views/modals/newproject/newproject.compon
 import { BsModalModule } from 'ng2-bs3-modal';
 import { AddEditTaskComponent } from './views/modals/add-edit-task/add-edit-task.component';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { AddeditCommentsComponent } from './views/modals/addedit-comments/addedit-comments.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
     MyProfileComponent,
     NewprojectComponent,
     AddEditTaskComponent,
+    AddeditCommentsComponent,
   ],
   imports: [
     BrowserModule,

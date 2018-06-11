@@ -112,5 +112,29 @@ export class ApiService {
             });
     }
 
+    editComment(taskName, projectId, oldMsg, newMsg) {
+        return this.httpClient
+            .post('http://127.0.0.1:3000/api/project/editcomment', { taskName: taskName, projectId: projectId, oldMsg: oldMsg , newMsg: newMsg}, this.addToken())
+            .map((response: Response) => {
+                return response;
+            });
+    }
+
+    addComment(projectId, comment, taskName) {
+        return this.httpClient
+            .post('http://127.0.0.1:3000/api/project/addcomment', {projectId: projectId, commentMsg: comment, taskName: taskName }, this.addToken())
+            .map((response: Response) => {
+                return response;
+            });
+    }
+
+    deleteComment(projectId, comment, taskName) {
+        return this.httpClient
+            .post('http://127.0.0.1:3000/api/project/deleteComment', {projectId: projectId, commentMsg: comment, taskName: taskName }, this.addToken())
+            .map((response: Response) => {
+                return response;
+            });
+    }
+
 
 }
