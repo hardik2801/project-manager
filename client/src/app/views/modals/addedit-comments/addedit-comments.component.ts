@@ -39,6 +39,7 @@ export class AddeditCommentsComponent implements OnInit {
       this.modalClosed.emit(null);
     }
     this.noComment = false;
+    this.cancel();
     this.modal.close();
   }
 
@@ -108,9 +109,7 @@ export class AddeditCommentsComponent implements OnInit {
                 this.task = task;
               }
             });
-            this.newComment = false;
-            this.commentMessage = null;
-            this.oldComment = false;
+            this.cancel();
             this.toastr.success('Comment Updated');
           }
         });
