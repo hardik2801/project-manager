@@ -1,0 +1,21 @@
+.head-band {
+    background-color: purple;
+    height: 40px;
+}
+
+.head-band-icon {
+    margin-top:10px;
+    margin-left:45%;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.right {
+    float: right;
+    padding-right: 25px;
+    padding-top: 10px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #ffffff;
+    cursor: pointer;
+}

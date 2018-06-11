@@ -1,0 +1,41 @@
+<bs-modal #modal>
+  <bs-modal-header>
+    <h3 class="modal-title">Add/Edit Task</h3>
+  </bs-modal-header>
+  <bs-modal-body>
+
+    <div class="form-group col-xs-6">
+      <label for="taskName">Name</label>
+      <input type="text" class="form-control" id="taskName" [ngModel]="task?.name" (ngModelChange)="task.name = $event">
+    </div>
+    <div class="form-group col-xs-6">
+      <label for="taskDeadline">Deadline</label>
+      <angular2-date-picker [ngModel]="task?.deadline" (ngModelChange)="task.deadline = $event" [settings]="settings"></angular2-date-picker>
+    </div>
+    <div class="form-group col-xs-6">
+      <label for="taskPriority">Priority</label>
+      <select id="taskPriority" class="form-control" [ngModel]="task?.priority" (ngModelChange)="task.priority = $event">
+        <option value="" class="form-group">Select Priority</option>
+        <option value="high" class="form-group">High</option>
+        <option value="medium" class="form-group">Medium</option>
+        <option value="low" class="form-group">Low</option>
+      </select>
+    </div>
+    <div class="form-group col-xs-6">
+      <label for="taskStatus">Status</label>
+      <select id="taskStatus" class="form-control" [ngModel]="task?.status" (ngModelChange)="task.status = $event">
+        <option value="" class="form-group">Select Status</option>
+        <option value="pending" class="form-group">Pending</option>
+        <option value="in process" class="form-group">In Process</option>
+        <option value="done" class="form-group">Done</option>
+      </select>
+    </div>
+
+  </bs-modal-body>
+  <bs-modal-footer [showDefaultButtons]="false">
+    <div class="box-footer">
+      <button class="btn btn-default" (click)="close(null)">Close</button>
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Save</button>
+    </div>
+  </bs-modal-footer>
+</bs-modal>

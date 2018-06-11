@@ -1,0 +1,86 @@
+<section class="content-header container" [hidden]="loading.projects">
+  <h3 *ngIf="showingProjects">
+    Welcome {{name}}!
+  </h3>
+
+  <h3 *ngIf="showingTasks">
+    {{projectName}}!
+  </h3>
+  <h5 *ngIf="showingProjects">Click on any Project to get Started or </h5>
+  <a *ngIf="showingProjects" class="btn btn-primary open-modal-btn" (click)="projectModal(null)">Add New Project</a>
+  <button *ngIf="showingTasks" type="button" class="btn btn-default btn-sm" (click)="goBack()">
+      <span class="glyphicon glyphicon-chevron-left"></span> Back </button>
+      <a class="btn btn-primary open-modal-btn" *ngIf="showingTasks && tasks.length > 0 " (click)="taskModal(null)">Add Task</a>
+  <app-newproject [incomingData]="projectModalData" [userId]="userId" (modalClosed)="closeModal($event)"></app-newproject>
+  <app-add-edit-task [incomingData]="taskModalData" [projectId]="projectId" (modalClosed)="closeTaskModal($event)"></app-add-edit-task>
+</section>
+
+<section class="content" [hidden]="loading.tasks" *ngIf="showingProjects">
+  <div class="row">
+    <div class="col-xs-6 projects">
+      <table class="table table-bordered table-striped" *ngIf="projects.length > 0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Started On</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let project of projects" class="clickable">
+            <td (click)="showTasks(project)">{{project.name}}</td>
+            <td (click)="showTasks(project)">{{project.createdon | date: 'medium'}}</td>
+            <td>
+              <button type="button" class="btn btn-default btn-sm" (click)="projectModal(project)">
+                <span class="glyphicon glyphicon-edit"></span> Edit
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteProject(project)"> Delete </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 *ngIf="projects.length == 0">No Projects have been Added.
+        <a (click)="projectModal(null)">Click Here</a> to Add a Project </h4>
+    </div>
+  </div>
+</section>
+
+<section class="content" [hidden]="loading.projects" *ngIf="showingTasks">
+  <div class="row">
+    <div class="col-xs-8 projects">
+      <table class="table table-bordered table-striped" *ngIf="tasks.length > 0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Added On</th>
+            <th>Deadline</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Comments</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{task.name}}</td>
+            <td>{{task.createdon | date: 'medium'}}</td>
+            <td>{{(task.deadline | date: 'medium') || 'NA'}}</td>
+            <td>{{task.priority || 'NA' }}</td>
+            <td>{{task.status || 'NA'}}</td>
+            <td><a (click)="viewComments(task.comments)">View/Add/Edit Comments</a></td>
+            <td>
+              <button type="button" class="btn btn-default btn-sm" (click)="taskModal(task)">
+                <span class="glyphicon glyphicon-edit"></span> Edit
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteTask(task)"> Delete </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 *ngIf="tasks.length == 0">No tasks have been Added. <a class="btn btn-primary open-modal-btn" (click)="taskModal(null)">Add Task</a></h4>
+    </div>
+  </div>
+</section>
+
+
+<div class="loading loading-big" [hidden]="!loading.projects || !loading.tasks"></div>

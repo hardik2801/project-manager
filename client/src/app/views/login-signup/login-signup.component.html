@@ -1,0 +1,42 @@
+<div class="container" *ngIf="currentRoute=='login'">
+  <div [hidden]="!loading" class="loading loading-big"></div>
+  <div class="row set-mid" [hidden]="loading">
+    <div class="title">
+      <h4>Hello!</h4>
+      <span>Please Log In to Your Account.</span>
+    </div>
+    <input type="text" id="email" class="form-control form-custom" [(ngModel)]="email_ip" placeholder="Email Address" required="required"
+    />
+    <input type="password" id="password" class="form-control form-custom" [(ngModel)]="password_ip" placeholder="Password" required="required"
+    />
+    <div class="row">
+      <button class="btn btn-custom" (click)="login()">Login</button>
+    </div>
+    <span class="bottom-text">
+      Still without account?
+      <a (click)="navigate('signup')">Signup</a>
+    </span>
+  </div>
+</div>
+<div class="container" *ngIf="currentRoute == 'signup'">
+  <div [hidden]="!loading" class="loading loading-big"></div>
+  <div class="row set-mid" [hidden]="loading">
+    <div class="title">
+      <h4>Signup</h4>
+      <span>Create an account to use Paynearby without limits. For free.</span>
+    </div>
+    <input type="text" id="new_name" class="form-control form-custom" [(ngModel)]="name_ip" placeholder="Name" required="required"
+    />
+    <input type="email" id="new_email" class="form-control form-custom" [(ngModel)]="email_ip" placeholder="Email Address" required="required"
+    />
+    <input type="password" id="new_password" class="form-control form-custom" [(ngModel)]="password_ip" placeholder="Password"
+      required="required" />
+    <div class="row">
+      <button class="btn btn-custom" (click)="signup()">Signup</button>
+    </div>
+    <span class="bottom-text">
+      Already have an account?
+      <a (click)="navigate('login')">Login</a>
+    </span>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<bs-modal #modal>
+  <bs-modal-header>
+    <h3 class="modal-title">Add New Project</h3>
+  </bs-modal-header>
+  <bs-modal-body>
+    <div class="form-group col-xs-12">
+      <label for="newProjectName">Name</label>
+      <input type="text" class="form-control" id="newProjectName" [ngModel]="projectName" (ngModelChange)="projectName = $event">
+      <span class="text-danger" [hidden]="!noName">No Name Entered</span>
+    </div>
+  </bs-modal-body>
+  <bs-modal-footer [showDefaultButtons]="false">
+    <div class="box-footer">
+      <button class="btn btn-default" (click)="close()">Close</button>
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Save</button>
+    </div>
+  </bs-modal-footer>
+</bs-modal>

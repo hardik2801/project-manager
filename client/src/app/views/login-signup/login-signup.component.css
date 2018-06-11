@@ -1,0 +1,37 @@
+.title {
+    margin-bottom: 10px;
+}
+
+.title span {
+    color: grey;
+}
+
+.bottom-text {
+color: grey;
+position: relative;
+top:50px;
+left: 30px;
+}
+.bottom-text a {
+    color: purple;
+}
+
+.btn-custom {
+    border-radius: 50%;
+    background-color: purple;
+    font-size: 18px;
+    font-weight:bold;
+    float: left;
+    margin-left: 20px;
+    color: #d4bdbd;
+}
+
+.forgot-text{
+    position: relative;
+    margin-top: 10px;
+    left: 75px;
+}
+
+.forgot-text a {
+    color: purple !important;
+}

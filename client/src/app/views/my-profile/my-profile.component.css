@@ -1,0 +1,16 @@
+.custom-color {
+    color: grey;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+.projects {
+    margin-left: 25%;
+    margin-top: 20px;
+}
+
+.clickable {
+    cursor: pointer;
+}
