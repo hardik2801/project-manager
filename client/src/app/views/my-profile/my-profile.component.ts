@@ -120,6 +120,11 @@ export class MyProfileComponent implements OnInit {
     }
   }
 
+  closeCommentsModal(new_task) {
+    var index = this.tasks.findIndex((task) => { return (task.name == new_task.name && task.createdon == new_task.createdon) });
+    this.tasks[index] = new_task;
+  }
+
   showTasks(project) {
     this.showingProjects = false;
 

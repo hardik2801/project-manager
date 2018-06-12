@@ -10,10 +10,10 @@
   <a *ngIf="showingProjects" class="btn btn-primary open-modal-btn" (click)="projectModal(null)">Add New Project</a>
   <button *ngIf="showingTasks" type="button" class="btn btn-default btn-sm" (click)="goBack()">
       <span class="glyphicon glyphicon-chevron-left"></span> Back </button>
-      <a class="btn btn-primary open-modal-btn" *ngIf="showingTasks && tasks.length > 0 " (click)="taskModal(null)">Add Task</a>
+      <a class="btn btn-primary open-modal-btn" *ngIf="showingTasks" (click)="taskModal(null)">Add Task</a>
   <app-newproject [incomingData]="projectModalData" [userId]="userId" (modalClosed)="closeModal($event)"></app-newproject>
   <app-add-edit-task [incomingData]="taskModalData" [projectId]="projectId" (modalClosed)="closeTaskModal($event)"></app-add-edit-task>
-  <app-addedit-comments [incomingData]="taskModalData" [projectId]="projectId"></app-addedit-comments>
+  <app-addedit-comments [incomingData]="taskModalData" [projectId]="projectId" (modalClosed)="closeCommentsModal($event)"></app-addedit-comments>
 </section>
 
 <section class="content" [hidden]="loading.tasks" *ngIf="showingProjects">

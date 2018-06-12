@@ -31,13 +31,8 @@ export class AddeditCommentsComponent implements OnInit {
     this.modal.open();
   }
 
-  close(data, operation) {
-    if (data) {
-      data.operation = operation;
-      this.modalClosed.emit(data);
-    } else {
-      this.modalClosed.emit(null);
-    }
+  close() {
+    this.modalClosed.emit(this.task);
     this.noComment = false;
     this.cancel();
     this.modal.close();
