@@ -15,19 +15,19 @@
     <div class="form-group col-xs-6">
       <label for="taskPriority">Priority</label>
       <select id="taskPriority" class="form-control" [ngModel]="task?.priority" (ngModelChange)="task.priority = $event">
-        <option value="" class="form-group">Select Priority</option>
-        <option value="high" class="form-group">High</option>
-        <option value="medium" class="form-group">Medium</option>
-        <option value="low" class="form-group">Low</option>
+        <option value="">Select Priority</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
       </select>
     </div>
-    <div class="form-group col-xs-6">
+    <div class="form-group col-xs-6" style="margin-top: -73px;">
       <label for="taskStatus">Status</label>
       <select id="taskStatus" class="form-control" [ngModel]="task?.status" (ngModelChange)="task.status = $event">
-        <option value="" class="form-group">Select Status</option>
-        <option value="pending" class="form-group">Pending</option>
-        <option value="in process" class="form-group">In Process</option>
-        <option value="done" class="form-group">Done</option>
+        <option value="">Select Status</option>
+        <option value="pending">Pending</option>
+        <option value="in process">In Process</option>
+        <option value="done">Done</option>
       </select>
     </div>
 

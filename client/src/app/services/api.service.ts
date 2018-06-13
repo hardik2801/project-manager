@@ -79,9 +79,9 @@ export class ApiService {
             });
     }
 
-    deleteTask(taskName, projectId) {
+    deleteTask(taskId, projectId) {
         return this.httpClient
-            .post('http://127.0.0.1:3000/api/project/deletetask', { id: projectId, taskName: taskName }, this.addToken())
+            .post('http://127.0.0.1:3000/api/project/deletetask', { id: projectId, taskId: taskId }, this.addToken())
             .map((response: Response) => {
                 return response;
             });
@@ -96,9 +96,9 @@ export class ApiService {
             });
     }
 
-    editTask(task, projectId, oldName) {
+    editTask(task, projectId) {
         return this.httpClient
-            .post('http://127.0.0.1:3000/api/project/edittask', { task: task, projectId: projectId, oldName: oldName }, this.addToken())
+            .post('http://127.0.0.1:3000/api/project/edittask', { task: task, projectId: projectId}, this.addToken())
             .map((response: Response) => {
                 return response;
             });
@@ -112,25 +112,25 @@ export class ApiService {
             });
     }
 
-    editComment(taskName, projectId, oldMsg, newMsg) {
+    editComment(projectId, taskId, commentId , commentMessage) {
         return this.httpClient
-            .post('http://127.0.0.1:3000/api/project/editcomment', { taskName: taskName, projectId: projectId, oldMsg: oldMsg , newMsg: newMsg}, this.addToken())
+            .post('http://127.0.0.1:3000/api/project/editcomment', { projectId: projectId, taskId: taskId, commentId: commentId , commentMessage: commentMessage}, this.addToken())
             .map((response: Response) => {
                 return response;
             });
     }
 
-    addComment(projectId, comment, taskName) {
+    addComment(projectId, taskId, commentMessage) {
         return this.httpClient
-            .post('http://127.0.0.1:3000/api/project/addcomment', {projectId: projectId, commentMsg: comment, taskName: taskName }, this.addToken())
+            .post('http://127.0.0.1:3000/api/project/addcomment', {projectId: projectId, taskId: taskId, commentMessage: commentMessage }, this.addToken())
             .map((response: Response) => {
                 return response;
             });
     }
 
-    deleteComment(projectId, comment, taskName) {
+    deleteComment(projectId, taskId, commentId) {
         return this.httpClient
-            .post('http://127.0.0.1:3000/api/project/deleteComment', {projectId: projectId, commentMsg: comment, taskName: taskName }, this.addToken())
+            .post('http://127.0.0.1:3000/api/project/deleteComment', {projectId: projectId, taskId: taskId, commentId: commentId }, this.addToken())
             .map((response: Response) => {
                 return response;
             });

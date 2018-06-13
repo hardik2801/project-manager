@@ -65,30 +65,25 @@ function deleteProject(req, res) {
 
 function deleteTask(req, res) {
     var projectId = req.body.id;
-    var taskName = req.body.taskName;
+    var taskId = req.body.taskId;
 
-    // var updateQuery = {
-    //     $pull: {
-    //         'tasks.$.name': taskName
-    //     }
-    // };
-    Projects.find({ _id: projectId }, function (err, project) {
+    Projects.findById(projectId, function (err, project) {
         if (err) {
             return res.json(ResponseUtils.responseError(err));
         }
 
-        var index = project[0].tasks.findIndex((task) => {
-            return task.name == taskName;
+        var index = project.tasks.findIndex((task) => {
+            return task._id == taskId;
         });
         if (index > -1) {
-            project[0].tasks.splice(index, 1);
+            project.tasks[index].remove();
         }
 
-        Projects.update({ _id: projectId }, { $set: { tasks: project[0].tasks } }, function (err, doc) {
+        project.save(function (err, doc) {
             if (err) {
                 return res.json(ResponseUtils.responseError(err));
             }
-            return res.json(ResponseUtils.responseMessage(true, 'success', project));
+            return res.json(ResponseUtils.responseMessage(true, 'success', doc));
         });
     });
 }
@@ -105,18 +100,19 @@ function getTasks(req, res) {
 
 function editTask(req, res) {
     var projectId = req.body.projectId;
-    var taskOldName = req.body.oldName;
+    var newTask = req.body.task;
 
-    Projects.findById(projectId).lean().exec(function (err, project) {
+    Projects.findById(projectId).exec(function (err, project) {
         if (err) {
             return res.json(ResponseUtils.responseError(err));
         }
-
-        Projects.update({ 'tasks.name': taskOldName }, { $set: { 'tasks.$': req.body.task } }, { new: true, upsert: true }, function (err, result) {
+        var index = project.tasks.findIndex((task) => { return task._id == newTask._id; });
+        project.tasks[index] = newTask;
+        project.save(function (err, task) {
             if (err) {
                 return res.json(ResponseUtils.responseError(err));
             }
-            return res.json(ResponseUtils.responseMessage(true, 'success', result));
+            return res.json(ResponseUtils.responseMessage(true, 'success', task));
         });
     });
 }
@@ -124,92 +120,95 @@ function editTask(req, res) {
 function addTask(req, res) {
     var projectId = req.body.projectId;
 
-    var updateQuery = {
-        $addToSet: {
-            tasks: req.body.task
-        }
-    };
-
-    Projects.findByIdAndUpdate(projectId, updateQuery, { new: true }, function (err, project) {
-        if (err) {
-            return res.json(ResponseUtils.responseError(err));
-        }
-        return res.json(ResponseUtils.responseMessage(true, 'success', project));
-    });
-
-}
-
-function editComment(req, res) {
-    var projectId = req.body.projectId;
-    var taskName = req.body.taskName;
-
-    Projects.find({ _id: projectId }).lean().exec(function (err, project) {
+    Projects.findById(projectId).exec(function (err, project) {
         if (err) {
             return res.json(ResponseUtils.responseError(err));
         }
 
-        var index = project[0].tasks.findIndex((task) => { return task.name == taskName; });
-        var commentIndex = project[0].tasks[index].comments.findIndex((comment) => { return comment.message == req.body.oldMsg; });
-        project[0].tasks[index].comments[commentIndex].message = req.body.newMsg;
-        project[0].tasks[index].comments[commentIndex].modifiedon = new Date();
+        project.tasks.push(req.body.task);
 
-        Projects.findByIdAndUpdate(projectId, { $set: { tasks: project[0].tasks } }, { new: true }, function (err, finalResult) {
+        project.save(function (err, project) {
             if (err) {
                 return res.json(ResponseUtils.responseError(err));
             }
-            return res.json(ResponseUtils.responseMessage(true, 'success', finalResult));
+            return res.json(ResponseUtils.responseMessage(true, 'success', project));
+        });
+    });
+}
+
+
+function deleteComment(req, res) {
+    var projectId = req.body.projectId;
+    var taskId = req.body.taskId;
+    var commentId = req.body.commentId;
+
+    Projects.findById(projectId).exec(function (err, project) {
+        if (err) {
+            return res.json(ResponseUtils.responseError(err));
+        }
+
+        var taskIndex = project.tasks.findIndex((task) => { return task._id == taskId; });
+        var commentIndex = project.tasks[taskIndex].comments.findIndex((comment) => { return comment._id == commentId; });
+        project.tasks[taskIndex].comments[commentIndex].remove();
+
+        project.markModified('tasks');
+
+        project.save(function (err, project) {
+            if (err) {
+                return res.json(ResponseUtils.responseError(err));
+            }
+            return res.json(ResponseUtils.responseMessage(true, 'success', project));
         });
     });
 }
 
 function addComment(req, res) {
     var projectId = req.body.projectId;
-    var taskName = req.body.taskName;
+    var taskId = req.body.taskId;
+    var newComment = req.body.commentMessage;
 
-    var newComment = {
-        message: req.body.commentMsg,
-        createdon: new Date()
-    };
-
-    Projects.find({ _id: projectId }).lean().exec(function (err, project) {
+    Projects.findById(projectId).exec(function (err, project) {
         if (err) {
             return res.json(ResponseUtils.responseError(err));
         }
 
-        project[0].tasks.forEach((task) => {
+        var taskIndex = project.tasks.findIndex((task) => { return task._id == taskId; });
+        project.tasks[taskIndex].comments.push({ message: newComment });
 
-            if (task.name == taskName) {
-                task.comments.push(newComment);
-            }
-        });
+        project.markModified('tasks');
 
-        Projects.findByIdAndUpdate(projectId, { $set: { tasks: project[0].tasks } }, { new: true }, function (err, finalResult) {
+        project.save(function (err, project) {
             if (err) {
                 return res.json(ResponseUtils.responseError(err));
             }
-            return res.json(ResponseUtils.responseMessage(true, 'success', finalResult));
+            return res.json(ResponseUtils.responseMessage(true, 'success', project));
         });
     });
 }
 
-function deleteComment(req, res) {
+function editComment(req, res) {
     var projectId = req.body.projectId;
-    var taskName = req.body.taskName;
+    var taskId = req.body.taskId;
+    var commentId = req.body.commentId;
+    var newComment = req.body.commentMessage;
 
-    Projects.find({ _id: projectId }).lean().exec(function (err, project) {
+    Projects.findById(projectId).exec(function (err, project) {
         if (err) {
             return res.json(ResponseUtils.responseError(err));
         }
 
-        var index = project[0].tasks.findIndex((task) => { return task.name == taskName; });
-        var commentIndex = project[0].tasks[index].comments.findIndex((comment) => { return comment.message == req.body.commentMsg; });
-        project[0].tasks[index].comments.splice(commentIndex, 1);
+        var taskIndex = project.tasks.findIndex((task) => { return task._id == taskId; });
+        var commentIndex = project.tasks[taskIndex].comments.findIndex((comment) => { return comment._id == commentId; });
+        project.tasks[taskIndex].comments[commentIndex].message = newComment;
 
-        Projects.findByIdAndUpdate(projectId, { $set: { tasks: project[0].tasks } }, { new: true }, function (err, finalResult) {
+        project.markModified('tasks');
+        project.markModified('tasks.comments');
+
+        project.save(function (err, project) {
             if (err) {
                 return res.json(ResponseUtils.responseError(err));
             }
-            return res.json(ResponseUtils.responseMessage(true, 'success', finalResult));
+            return res.json(ResponseUtils.responseMessage(true, 'success', project));
         });
     });
 }

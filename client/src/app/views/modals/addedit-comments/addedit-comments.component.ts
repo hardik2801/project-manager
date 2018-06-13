@@ -16,7 +16,7 @@ export class AddeditCommentsComponent implements OnInit {
   @Output('modalClosed')
   modalClosed = new EventEmitter<any>();
 
-  task; taskName; noComment; oldMsg;
+  task; taskName; noComment; taskId; commentId;
   resp; commentMessage; newComment; oldComment;
 
   constructor(private apiService: ApiService, public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -27,6 +27,7 @@ export class AddeditCommentsComponent implements OnInit {
     if (this.incomingData) {
       this.task = this.incomingData;
       this.taskName = this.incomingData.name;
+      this.taskId = this.incomingData._id;
     }
     this.modal.open();
   }
@@ -53,23 +54,24 @@ export class AddeditCommentsComponent implements OnInit {
   }
 
   editComment(comment) {
-    this.oldMsg = comment.message;
+    this.commentId = comment._id;
     this.commentMessage = comment.message;
     this.oldComment = true;
   }
 
   deleteComment(comment) {
-    this.apiService.deleteComment(this.projectId, this.commentMessage, this.taskName).subscribe((response) => {
+    this.apiService.deleteComment(this.projectId, this.taskId, comment._id).subscribe((response) => {
       this.resp = response;
     }, (error) => {
       console.log('Error :: ' + error);
     },
       () => {
+        console.log(this.resp, 'on delete');
         if (!this.resp.status) {
           this.toastr.error('Some Error Occured, Please Try Again');
         } else if (this.resp.status) {
           this.resp.data.tasks.forEach((task) => {
-            if (task.name == this.taskName) {
+            if (task._id == this.taskId) {
               this.task = task;
             }
           });
@@ -85,22 +87,24 @@ export class AddeditCommentsComponent implements OnInit {
   }
 
   onSubmit() {
+    
     if (this.isEmptyOrSpaces(this.commentMessage)) {
       this.noComment = true;
       return;
     }
     if (this.oldComment) {
-      this.apiService.editComment(this.taskName, this.projectId, this.oldMsg, this.commentMessage).subscribe((response) => {
+      this.apiService.editComment(this.projectId, this.taskId, this.commentId ,this.commentMessage).subscribe((response) => {
         this.resp = response;
       }, (error) => {
         console.log('Error :: ' + error);
       },
         () => {
+          console.log(this.resp, 'in edit');
           if (!this.resp.status) {
             this.toastr.error('Some Error Occured, Please Try Again');
           } else if (this.resp.status) {
             this.resp.data.tasks.forEach((task) => {
-              if (task.name == this.taskName) {
+              if (task._id == this.taskId) {
                 this.task = task;
               }
             });
@@ -109,17 +113,18 @@ export class AddeditCommentsComponent implements OnInit {
           }
         });
     } else {
-      this.apiService.addComment(this.projectId, this.commentMessage, this.taskName).subscribe((response) => {
+      this.apiService.addComment(this.projectId, this.taskId, this.commentMessage).subscribe((response) => {
         this.resp = response;
       }, (error) => {
         console.log('Error :: ' + error);
       },
         () => {
+          console.log(this.resp, 'on add');
           if (!this.resp.status) {
             this.toastr.error('Some Error Occured, Please Try Again');
           } else if (this.resp.status) {
             this.resp.data.tasks.forEach((task) => {
-              if (task.name == this.taskName) {
+              if (task._id == this.taskId) {
                 this.task = task;
               }
             });

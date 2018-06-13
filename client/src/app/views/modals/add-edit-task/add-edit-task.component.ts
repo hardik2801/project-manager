@@ -66,7 +66,7 @@ export class AddEditTaskComponent implements OnInit {
     }
 
     if (this.incomingData) {
-      this.apiService.editTask(this.task, this.projectId, this.taskName).subscribe((response) => {
+      this.apiService.editTask(this.task, this.projectId).subscribe((response) => {
         this.resp = response;
       }, (error) => {
         console.log('Error :: ' + error);
@@ -75,7 +75,7 @@ export class AddEditTaskComponent implements OnInit {
           if (!this.resp.status) {
             this.toastr.error('Some Error Occured, Please Try Again');
           } else if (this.resp.status) {
-            this.toastr.success('Project Updated');
+            this.toastr.success('Task Updated');
             this.close(this.resp.data, 'edited');
           }
         });

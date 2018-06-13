@@ -86,7 +86,7 @@ export class MyProfileComponent implements OnInit {
   }
 
   deleteTask(task) {
-    this.apiService.deleteTask(task.name, this.projectId).subscribe((response) => {
+    this.apiService.deleteTask(task._id, this.projectId).subscribe((response) => {
       this.resp = response;
     }, (error) => {
       console.log('Error :: ' + error);
@@ -95,7 +95,7 @@ export class MyProfileComponent implements OnInit {
         if (!this.resp.status) {
           this.toastr.error('Some Error Occured, Please Try Again');
         } else if (this.resp.status) {
-          this.tasks = this.resp.data[0].tasks;
+          this.tasks = this.resp.data.tasks;
           this.toastr.success('Task Deleted');
         }
       });
