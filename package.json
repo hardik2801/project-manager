@@ -1,7 +1,7 @@
 {
-  "name": "signmeup",
+  "name": "project-manager",
   "version": "1.0.0",
-  "description": "Simple Signup and Registration App",
+  "description": "Lets you manage projects. Add new project and tasks to that project, assign deadlines, comment on tasks etc..",
   "main": "Gruntfile.js",
   "scripts": {},
   "repository": {
