@@ -37,7 +37,7 @@
     "jquery-knob": "^1.2.11",
     "jquery-sparkline": "^2.4.0",
     "jquery-ui": "^1.12.1",
-    "jsonwebtoken": "^8.2.0",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.2",
     "mongoose": "^5.7.5",
     "ng-router-state-params": "0.0.11",
